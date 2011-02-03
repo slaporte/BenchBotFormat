@@ -1,0 +1,50 @@
+<?php
+	
+	/**
+	* categories to automatically add to an article via categoryGuess.
+	*/
+	
+	$catlist = array(
+		"tax" => "[[Category:United States Supreme Court decisions on taxation]]",
+		"civil.*jurisdiction" => "[[Category:United States Supreme Court decisions on civil procedure]]",
+		"Sherman" => "[[Category:United States Supreme Court decisions on antitrust]]",
+		"antitrust" => "[[Category:United States Supreme Court decisions on antitrust]]",
+		"copyright" => "[[Category:United States Supreme Court decisions on copyright]]",
+		"impeach" => "[[Category:United States Supreme Court decisions on evidence]]",
+		"class action" => "[[Category:United States Supreme Court decisions on class action]]",
+		"ERISA" => "[[Category:United States Supreme Court decisions on ERISA]]",
+		//"employee benefit" => "[[Category:United States Supreme Court decisions on ERISA]]",
+		"treaty" => "[[Category:United States Supreme Court decisions on treaties]]",
+		"constitutional" => "[[Category:United States Supreme Court decisions on constitutionality]]",
+		"delegation of .* power" => "[[Category:United States Supreme Court decisions on separation of Powers]]",
+		"discrimination" => "[[Category:United States Supreme Court decisions on civil rights]]",
+		"§ 1983" => "[[Category:United States Supreme Court decisions on civil rights]]",
+		"ethical obligation" => "[[Category:United States Supreme Court decisions on professional responsibility]]",
+		"Rule 12\(b\)\(6\)" => "[[Category:United States Supreme Court decisions on civil procedure]]",
+		"NEPA" => "[[Category:United States Supreme Court decisions on environmental aw]]",
+		"environmental" => "[[Category:United States Supreme Court decisions on environmental law]]",
+		"law enforcement" => "[[Category:United States Supreme Court decisions on criminal law]]",
+		"First Amendment" => "[[Category:United States Supreme Court decisions on the First Amendment]]",
+		"Second Amendment" => "[[Category:United States Supreme Court decisions on the Second Amendment]]",
+		"Fourth Amendment" => "[[Category:United States Supreme Court decisions on the Fourth Amendment]]",
+		"Fifth Amendment" => "[[Category:United States Supreme Court decisions on the Fifth Amendment]]",
+		"Eighth Amendment" => "[[Category:United States Supreme Court decisions on the Eighth Amendment]]",
+		"[Dd]ue [Pp]rocess" => "[[Category:United States Supreme Court decisions on due process]]",
+		"community property" => "[[Category:United States Supreme Court decisions on property]]",
+		"disparate-impact" => "[[Category:United States Supreme Court decisions on civil rights]]",
+		"freedom of speech" => "[[Category:United States Supreme Court decisions on freedom of speech]]", 
+		"time, place, and manner" => "[[Category:United States Supreme Court decisions on freedom of speech]]",
+		"clear and present danger" => "[[Category:United States Supreme Court decisions on freedom of speech]]",
+		"free exercise of religion" => "[[Category:United States Supreme Court decisions on religion]]",
+		"Establishment Clause" => "[[Category:United States Supreme Court decisions on religion]]",
+		"Sixth Amendment" => "[[Category:United States Supreme Court decisions on the Sixth Amendment]]",
+		"Commerce Clause" => "[[Category:United States Supreme Court decisions on the Commerce Clause]]",
+		"justiciable" => "[[Category:United States Supreme Court decisions on justiciability]]",
+		"justiciability" => "[[Category:United States Supreme Court decisions on justiciability]]",
+		"abortion" => "[[Category:United States Supreme Court decisions on abortion]]",
+		"SEC" => "[[Category:United States Supreme Court decisions on securities]]",
+		"arbitrary and capricious" => "[[Category:United States Supreme Court decisions on statutory interpretation]]",
+		"complete diversity" => "[[Category:United States Supreme Court decisions on civil procedure]]",
+		"§ 1404\(a\)" => "[[Category:United States Supreme Court decisions on civil procedure]]",
+	);
+?>
