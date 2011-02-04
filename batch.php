@@ -59,17 +59,19 @@ function wikiCheckPageExistence($title, $wiki){
 * @param $fullCitation string Full citation
 * @return array ["Volume"], ["Reporter"], ["Page"]
 */
-function explodeCaseName($fullCitation){
+function explodeCaseName($FirstCitation = "none", $SecondCitation = "none", $ThirdCitation = "none"){
 	global $reporter;
-	$explodedCitation = explode(" ",$fullCitation);
-	foreach($explodedCitation as $key => $citationPeice){
-		if($citationPeice==$reporter){
-			$citation["Volume"] = $explodedCitation[$key-1];
-			$citation["Reporter"] = $explodedCitation[$key];
-			$citation["Page"] = $explodedCitation[$key+1];
+	$citations = array ($FirstCitation, $SecondCitation, $ThirdCitation);
+	foreach($citations as $fullCitation) {
+		$explodedCitation = explode(" ",$fullCitation);
+		foreach($explodedCitation as $key => $citationPart){
+			if($citationPart==$reporter){
+				$citation["Volume"] = $explodedCitation[$key-1];
+				$citation["Reporter"] = $explodedCitation[$key];
+				$citation["Page"] = $explodedCitation[$key+1];
+			}
 		}
 	}
-	
 	return $citation;
 }
 
@@ -482,7 +484,7 @@ function batchWikify($url) {
 	}
 	
 	 
-	$arrCite = explodeCaseName($casecite);
+	$arrCite = explodeCaseName($casecite, $casecite2, $casecite3);
 	
 	/**
 	*  determine file name
@@ -980,10 +982,13 @@ function batchWikify($url) {
 	$articlesList[] = $OpName."/Opinion of the Court";
 	$articlesList[] = "Talk:".$OpName."/Opinion of the Court";
 	
-	if(isset($casecite2)){
+	if(isset($casecite) && !preg_match("/U\.S\./", $casecite, $m)){
+		$ParallelCites[0] = "{{Parallel reporter|".$casecite."}}\n";
+	}
+	if(isset($casecite2) && !preg_match("/U\.S\./", $casecite2, $m)){
 		$ParallelCites[0] = "{{Parallel reporter|".$casecite2."}}\n";
 	}
-	if(isset($casecite3)){
+	if(isset($casecite3) && !preg_match("/U\.S\./", $casecite3, $m)){
 		$ParallelCites[1] = "{{Parallel reporter|".$casecite3."}}\n";
 	}
 	
@@ -1002,7 +1007,7 @@ function batchWikify($url) {
 	$TemplateCaseCaptionValues["courtbelow"] = $courtbelow;
 	$TemplateCaseCaptionValues["argdate"] = $argdate;
 	$TemplateCaseCaptionValues["decdate"] = $decdate;
-	$TemplateCaseCaptionValues["docket"] = $docket;
+	$TemplateCaseCaptionValues["docket"] = str_replace("\n", "", opinionFootnotesFormat($docket, $arr));
 	
 	$SyllabusBody["mainText"] = $Syllabus;
 	$SyllabusBody["notes"] = $SyllabusNotes;
@@ -1184,8 +1189,15 @@ function batchWikify($url) {
 	/**
 	* if there are additional cites to this case, make redirects
 	*/
-	
-	if(isset($casecite2)){
+	if(isset($casecite) && !preg_match("/U\.S\./", $casecite, $m)){
+		$articlesList[] = $casecite;
+		$fullText[] = "{{-start-}}
+		'''".$casecite."'''
+		#REDIRECT [[".$name[0]."]]
+		 
+		{{-stop-}}";
+		}
+	if(isset($casecite2) && !preg_match("/U\.S\./", $casecite2, $m)){
 		$articlesList[] = $casecite2;
 		$fullText[] = "{{-start-}}
 		'''".$casecite2."'''
@@ -1193,7 +1205,7 @@ function batchWikify($url) {
 		 
 		{{-stop-}}";
 		}
-	if(isset($casecite3)){
+	if(isset($casecite3) && !preg_match("/U\.S\./", $casecite3, $m)){
 		$articlesList[] = $casecite3;
 		$fullText[] = "{{-start-}}
 		'''".$casecite3."'''
