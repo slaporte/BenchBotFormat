@@ -796,7 +796,8 @@ function batchWikify($url) {
 	
 	$caseAuthorExpressionArray = array(
 		"/[Jj]ustice ([a-zA-Z]+) delivered/",
-		"/([A-Z']+), J., delivered the opinion/"
+		"/([A-Z']+), J., delivered the opinion/",
+		"/([A-Z]+), J./"
 	);
 	
 	foreach($caseAuthorExpressionArray as $caseAuthorExpression){
