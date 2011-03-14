@@ -151,6 +151,7 @@ function wikifyCite($txt,$formats) {
 			}
 		}
 	}
+	/**
 	foreach($constitutionFormats as $constitutionFormat) {
 		preg_match_all("/".$constitutionFormat."/",$txt,$constitutionMatches, PREG_SET_ORDER);
 		if(is_array($constitutionMatches)){
@@ -160,6 +161,7 @@ function wikifyCite($txt,$formats) {
 						$txt = preg_replace("/".$constitutionFormat."/","[[Constitution of the United States of America#Article $2]]",$txt);
 					}
 				}
+				
 				if($match[2] == " Amendment"){
 					if(preg_match("/Amendment \]\]/",$txt)) {} else {
 									$matchLower = strtolower($match[1]);
@@ -250,10 +252,11 @@ function wikifyCite($txt,$formats) {
 						$txt = preg_replace("/".$match[1].$match[2]."/","[[".$constitutionCite."|".$match[1]." Amendment]]",$txt);
 					}
 				}
+			
 			}
-		}
-
+		}	
 	}	
+	*/
 	if(isset($list)){
 		foreach($list as $shortcite) {
 			if(preg_match("/\[\[".$shortcite[0]." ".$shortcite[1]." ".$shortcite[1]."|".$shortcite[0]." ".$shortcite[1].", at ([0-9]+)\]\]/",$txt)){} else {
