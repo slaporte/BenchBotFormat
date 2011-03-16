@@ -94,7 +94,9 @@ $authorByName = array(
 "sanford" => "Edward Terry Sanford",
 "stone" => "Harlan F. Stone",
 "hughes" => "Charles Evans Hughes",
-"roberts" => "Owen Roberts",
+"roberts" => array(
+	"0" => "Owen Roberts", "0_start" => 1930, "0_end" => 1945,
+	"1" => "John G. Roberts", "1_start" => 2005, "1_end" => 2011),
 "cardozo" => "Benjamin N. Cardozo",
 "black" => "Hugo Black",
 "reed" => "Stanley Forman Reed",
@@ -130,7 +132,6 @@ $authorByName = array(
 "thomas" => "Clarence Thomas",
 "ginsburg" => "Ruth Bader Ginsburg",
 "breyer" => "Stephen Breyer",
-"roberts" => "John G. Roberts",
 "alito" => "Samuel Alito",
 "sotomayor" => "Sonia Sotomayor");
 ?>

@@ -51,3 +51,6 @@ The following templates are expected:
 
 More information on templates, formatting, and style for United States Supreme Court cases is available at <http://en.wikisource.org/wiki/Wikisource:WikiProject_U.S._Supreme_Court_cases>.
 
+== Change log ==
+
+04/15/2011 - Added phrases for splitting concurrences and dissents; fixed author full name for all dissents; fixed author last name for second concurrence; updated "roberts" in authorbyname.php to include Owen Roberts

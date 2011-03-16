@@ -230,7 +230,7 @@ function opinionParagraphRefs($paragraph){
 function buildPage($Section, $caseName, $authorLastName, $TemplateHeaderValues, $TemplateUSSCcaseValues, $TemplateCaseCaptionValues, $body, $ParallelCites) {
 	
 	$USSCcaseNo = "2"; // ever page except syllabus uses {{USSCcase2}}
-	
+	$authorLastName = trim($authorLastName);
 	switch($Section){
 		case "Syllabus":
 			$pageTitle = $caseName[0];
@@ -326,6 +326,7 @@ function buildPage($Section, $caseName, $authorLastName, $TemplateHeaderValues, 
 }
 
 function buildTalkPage($Section, $name, $authorLastName, $contributor, $decdate, $arrCite) {
+	$authorLastName = trim($authorLastName);
 	switch($Section) {
 		case "Syllabus":
 			$talkpageTitle = "Talk:".$name[0];
@@ -536,8 +537,9 @@ function batchWikify($url) {
 	*  check if a case with that name is already up
 	*/
 	if(wikiCheckPageExistence($name[0], "wikisource") == "{{subst:BASEPAGENAME}}"){
-	$name[0] = $name[0]." (".$arrCite['Volume']." ".$arrCite['Reporter']."*** ".$arrCite['Page'].")";
-	$dupList[] = $name[0]." (".$arrCite['Volume']." ".$arrCite['Reporter']."*** ".$arrCite['Page'].")";
+		$name[0] = $name[0]." (".$arrCite['Volume']." ".$arrCite['Reporter']."*** ".$arrCite['Page'].")";
+		$dupList[] = $name[0]." (".$arrCite['Volume']." ".$arrCite['Reporter']."*** ".$arrCite['Page'].")";
+		$Cats = $Cats . "[[Category:Automated disambiguation]] ";
 	}
 	
 	/**
@@ -650,7 +652,10 @@ function batchWikify($url) {
 		*/
 		$concurrenceExpressionsArray = array(
 			"/^justice ([a-z']+)\, concurring/",
-			"/^justice ([a-z']+)\, with .* concurring( in the judgment)*/"
+			"/^mr\. justice ([a-z']+) concurs/",
+			"/^justice ([a-z']+)\, with .* concurring( in the judgment)*/",
+			"/^mr\. [chief ]*justice ([A-Za-z]+)[,]* concurring/",
+			"/^mr\. justice ([a-z]+) and [a-z\s,\.]* concurring\./"
 			);
 			
 		foreach($concurrenceExpressionsArray as $concurrenceExpression){
@@ -663,7 +668,6 @@ function batchWikify($url) {
 				$concurrenceCount = $concurrenceCount +1;
 			}
 		}
-		
 		/**
 		* When no concurrence or dissent is counted, the paragraph
 		* belongs to the opinion
@@ -730,12 +734,15 @@ function batchWikify($url) {
 		*/
 		
 		$dissentExpressionsArray = array(
-			"/^mr\. justice ([a-z]+) dissenting/",
+			"/^mr\. justice ([a-z]+)[,]* dissenting/",
 			"/^mr\. justice ([a-z]+), with .* dissenting/",
 			"/^justice ([a-z']+)\, dissenting\./",
 			"/^justice ([a-z']+),* with .* dissenting\./",
 			"/^chief justice ([a-z']+)[,]* with .* dissenting\./",
-			"/^justice ([a-z]+)\, joined .* dissenting\.$/"
+			"/^justice ([a-z]+)\, joined .* dissenting\.$/",
+			"/^[the ]*separate opinion of mr\. justice ([A-Za-z]+)/",
+			"/^mr\. justice ([a-z]+) \(dissenting\)/",
+			"/^mr\. chief justice ([a-z]+), dissenting/"
 			);
 			
 		foreach($dissentExpressionsArray as $dissentExpression){
@@ -796,6 +803,7 @@ function batchWikify($url) {
 	
 	$caseAuthorExpressionArray = array(
 		"/[Jj]ustice ([a-zA-Z]+) delivered/",
+		"/[Jj]ustice ([a-zA-Z]+), after stating/",
 		"/([A-Z']+), J., delivered the opinion/",
 		"/([A-Z]+), J./"
 	);
@@ -823,7 +831,8 @@ function batchWikify($url) {
 	
 	$concurrenceAuthorExpressionArray = array(
 		"/([A-Za-z']+), J., filed a concurring/",
-		"/([A-Za-z']+), J., filed an opinion concurring/"
+		"/([A-Za-z']+), J., filed an opinion concurring/",
+		"/Mr\. Justice ([A-Za-z']+), concurring/"
 	);
 	
 	foreach($concurrenceAuthorExpressionArray as $concurrenceAuthorExpression){
@@ -848,28 +857,28 @@ function batchWikify($url) {
 	*/
 	if($Dis != ""&&!isset($dissentAuthor[0])){
 		$missingDissent = 1;
-		$dissentAuthor[0] = strstr($DissentAuthor," ");
+		$dissentAuthor[0] = strrchr($DissentAuthor," ");
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][0] = $dissentAuthor[0];
 	}elseif($Dis == ""){
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][0] = "";
 	}
 	if($Dis2 != ""&&!isset($dissentAuthor[1])){
 		$missingDissent = 1;
-		$dissentAuthor[1] = strstr($Dissent2Author," ");
+		$dissentAuthor[1] = strrchr($Dissent2Author," ");
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][1] = $dissentAuthor[1];
 	}elseif($Dis2 == ""){
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][1] = "";
 	}
 	if($Dis3 != ""&&!isset($dissentAuthor[2])){
 		$missingDissent = 1;
-		$dissentAuthor[2] = strstr($Dissent3Author," ");
+		$dissentAuthor[2] = strrchr($Dissent3Author," ");
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][2] = $dissentAuthor[2];
 	}elseif($Dis3 == ""){
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][2] = "";
 	}
 	if($Dis4 != ""&&!isset($dissentAuthor[3])){
 		$missingDissent = 1;
-		$dissentAuthor[3] = strstr($Dis4Author," ");
+		$dissentAuthor[3] = strrchr($Dis4Author," ");
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][3] = $dissentAuthor[3];
 	}elseif($Dis4 == ""){
 		$TemplateUSSCcaseValues["dissentAuthorLastName"][3] = "";
@@ -887,47 +896,47 @@ function batchWikify($url) {
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][1] = "";
 	}
 	if($Con3 != ""&&!isset($concurrenceAuthor[2])){
-		$concurrenceAuthor[2] = ucfirst(strstr($Con3Author," "));
+		$concurrenceAuthor[2] = ucfirst(strtolower($lastNameArray[2]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][2] = $concurrenceAuthor[2];
 	}elseif($Con3 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][2] = "";
 	}
 	if($Con4 != ""&&!isset($concurrenceAuthor[3])){
 		$missingConcurrence = 1;
-		$concurrenceAuthor[3] = ucfirst(strstr($Con4Author," "));
+		$concurrenceAuthor[3] = ucfirst(strtolower($lastNameArray[3]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][3] = $concurrenceAuthor[3];
 	}elseif($Con4 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][3] = "";
 	}
 	if($Con5 != ""&&!isset($concurrenceAuthor[4])){
 		$missingConcurrence = 1;
-		$concurrenceAuthor[4] = ucfirst(strstr($Con5Author," "));
+		$concurrenceAuthor[4] = ucfirst(strtolower($lastNameArray[4]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][4] = $concurrenceAuthor[4];
 	}elseif($Con5 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][4] = "";
 	}
 	if($Con6 != ""&&!isset($concurrenceAuthor[5])){
 		$missingConcurrence = 1;
-		$concurrenceAuthor[5] = ucfirst(strstr($Con6Author," "));
+		$concurrenceAuthor[5] = ucfirst(strtolower($lastNameArray[5]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][5] = $concurrenceAuthor[5];
 	}elseif($Con6 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][5] = "";
 	}
 	if($Con7 != ""&&!isset($concurrenceAuthor[6])){
 		$missingConcurrence = 1;
-		$concurrenceAuthor[6] = ucfirst(strstr($Con7Author," "));
+		$concurrenceAuthor[6] = ucfirst(strtolower($lastNameArray[6]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][6] = $concurrenceAuthor[6];
 	}elseif($Con7 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][6] = "";
 	}
 	if($Con8 != ""&&!isset($concurrenceAuthor[7])){
 		$missingConcurrence = 1;
-		$concurrenceAuthor[7] = ucfirst(strstr($Con8Author," "));
+		$concurrenceAuthor[7] = ucfirst(strtolower($lastNameArray[7]));
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][7] = $concurrenceAuthor[7];
 	}elseif($Con8 == ""){
 		$TemplateUSSCcaseValues["concurrenceAuthorLastName"][7] = "";
 	}
-	
+
 	/**
 	* clean up openjurist cites
 	*/
@@ -1129,6 +1138,8 @@ function batchWikify($url) {
 		$articlesList[] = $name[0]."/Dissent ".$dissentAuthor[0];
 		$articlesList[] = "Talk:".$name[0]."/Dissent ".$dissentAuthor[0];
 		
+		$TemplateHeaderValues["AuthorFullName"] = $DissentAuthor;
+		
 		$DisBody["mainText"] = $Dis;
 		$DisBody["notes"] = $DisNotes;
 		
@@ -1138,6 +1149,8 @@ function batchWikify($url) {
 	if($Dis2 != false) {
 		$articlesList[] = $name[0]."/Dissent ".$dissentAuthor[1];
 		$articlesList[] = "Talk:".$name[0]."/Dissent ".$dissentAuthor[1];
+		
+		$TemplateHeaderValues["AuthorFullName"] = $Dissent2Author;
 		
 		$Dis2Body["mainText"] = $Dis2;
 		$Dis2Body["notes"] = $Dis2Notes;
@@ -1149,6 +1162,8 @@ function batchWikify($url) {
 		$articlesList[] = $name[0]."/Dissent ".$dissentAuthor[2];
 		$articlesList[] = "Talk:".$name[0]."/Dissent ".$dissentAuthor[2];
 		
+		$TemplateHeaderValues["AuthorFullName"] = $Dissent3Author;
+		
 		$Dis3Body["mainText"] = $Dis3;
 		$Dis3Body["notes"] = $Dis3Notes;
 		
@@ -1159,6 +1174,8 @@ function batchWikify($url) {
 	if($Dis4 != false) {
 		$articlesList[] = $name[0]."/Dissent ".$dissentAuthor[3];
 		$articlesList[] = "Talk:".$name[0]."/Dissent ".$dissentAuthor[3];
+		
+		$TemplateHeaderValues["AuthorFullName"] = $Dissent4Author;
 		
 		$Dis4Body["mainText"] = $Dis4;
 		$Dis4Body["notes"] = $Dis4Notes;
